@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% from "_formhelpers.html" import render_field %}
+{% block content %}
+    <form method="get" action="">
+        <dl>
+            {{ render_field(context.form.from_position) }}
+            {{ render_field(context.form.to_position) }}
+        </dl>
+        <p><input type=submit value=Calculate>
+    </form>
+    <p>Result:</p>
+    {{ context.result }}
+{% endblock %}
