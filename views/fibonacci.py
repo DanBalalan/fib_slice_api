@@ -2,6 +2,8 @@ from itertools import count
 
 from flask.views import MethodView
 
+from utils.redis_cache import redis_cache
+
 
 class FibonacciView(MethodView):
 
@@ -21,6 +23,7 @@ class FibonacciView(MethodView):
         return res
 
     @staticmethod
+    @redis_cache
     def __fib_by_position(pos):
         if pos in (0, 1):
             return pos
