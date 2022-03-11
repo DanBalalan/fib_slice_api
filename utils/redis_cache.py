@@ -18,10 +18,8 @@ def redis_cache(func):
 
             if result:
                 result = json.loads(result)
-                print(f'got from cache key: {key}\nresult: {result}')
             else:
                 result = func(*args, **kwargs)
-                print(f'no cache key: {key}\nsaving: {result}')
                 r.set(key, json.dumps(result))
 
         return result
