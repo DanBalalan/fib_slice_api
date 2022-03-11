@@ -3,7 +3,7 @@ import os
 from flask import Flask
 
 from utils.router import Router
-from utils.constants import ENV_NAME_DEPLOY_TYPE, ENV_NAME_HOST, \
+from settings import ENV_NAME_DEPLOY_TYPE, ENV_NAME_HOST, \
     ENV_NAME_PORT, ENV_VALUE_DEV, DEFAULT_HOST, DEFAULT_PORT
 
 
