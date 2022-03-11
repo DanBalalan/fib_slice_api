@@ -3,11 +3,16 @@
 {% block content %}
     <form method="get" action="">
         <dl>
-            {{ render_field(context.form.from_position) }}
-            {{ render_field(context.form.to_position) }}
+            {{ render_field(context.form.from_arg) }}
+            {{ render_field(context.form.to_arg) }}
+            {{ render_field(context.form.slice_type) }}
         </dl>
         <p><input type=submit value=Calculate>
     </form>
     <p>Result:</p>
     <p id="response">{{ context.result }}</p>
+    {% if context.errors %}
+        <p>ERRORS:</p>
+        <p>{{ context.errors }}</p>
+    {% endif %}
 {% endblock %}

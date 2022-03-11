@@ -1,7 +1,7 @@
 import json
 from functools import wraps
 
-from redis import Redis
+from utils.redis_client import RedisClient
 
 from settings import REDIS_DEFAULT_PORT, REDIS_DEFAULT_HOST, REDIS_DEFAULT_DB, CACHE_KEY_PREFIX
 
@@ -14,17 +14,18 @@ def get_cache_key(func, args, kwargs):
 
 
 def redis_cache(func):
+    redis_client = RedisClient.get_client()
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         key = get_cache_key(func, args, kwargs)
 
-        with Redis(host=REDIS_DEFAULT_HOST, port=REDIS_DEFAULT_PORT, db=REDIS_DEFAULT_DB, decode_responses=True) as r:
-            result = r.get(key)
-            if result:
-                result = json.loads(result)
-            else:
-                result = func(*args, **kwargs)
-                r.set(key, json.dumps(result))
+        result = redis_client.get(key)
+        if result:
+            result = json.loads(result)
+        else:
+            result = func(*args, **kwargs)
+            redis_client.set(key, json.dumps(result))
 
         return result
     return wrapper
