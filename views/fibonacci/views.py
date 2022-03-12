@@ -4,8 +4,8 @@ from itertools import count
 from flask import request, render_template
 from flask.views import MethodView
 
+from utils.binary_search import binary_search_nearest
 from utils.fibonacci import fibonacci
-from utils.redis_cache import get_cache_key
 from utils.redis_client import RedisClient
 from settings import CACHE_KEY_PREFIX
 from .forms import FibonacciForm
@@ -42,14 +42,19 @@ class FibonacciView(MethodView):
         if min_value > max_value:
             return []
 
+        # Начинаем с максимально возможного значения, попутно заполняя весь недостающий кеш
+        # (предполагая, что существующий кеш непрерывный и целостный)
         max_cached_pos, max_cached_value = self.__get_cached_max_position()
         min_pos = 0
         if min_value > max_cached_value:
             min_pos = max_cached_pos + 1
         elif min_value == max_cached_value:
             min_pos = max_cached_pos
-        else:
-            min_pos = self.__get_min_position_by_value()  # TODO
+        else:  # min_value < max_cached_value
+            positions_sequence = [i for i in range(0, max_cached_pos, 1)]
+            min_pos, exact = binary_search_nearest(positions_sequence, min_value, fibonacci)
+            if not exact and min_pos > 0:
+                min_pos -= 1
 
         res = []
         for i in count(min_pos, 1):
@@ -67,10 +72,11 @@ class FibonacciView(MethodView):
             return []
 
         # Начинаем с максимально возможного значения, попутно заполняя весь недостающий кеш
+        # (предполагая, что существующий кеш непрерывный и целостный)
         cached_max, _ = self.__get_cached_max_position()
         if start_pos > cached_max:
             start_pos = cached_max + 1
-
+        print(f'start: {start_pos}, stop: {stop_pos}')
         curr_max_pos, curr_max_val = 0, 0
         res = []
         for i in range(start_pos, stop_pos + 1, 1):
@@ -83,7 +89,9 @@ class FibonacciView(MethodView):
 
         return res
 
-    def __get_min_position_by_value(self, value, cached_max):
+    def __get_min_position_by_value(self, value, max_cached_pos):
+        # min_value < max_cached_value
+
         if cached_max[1] >= value:
             pass
         else:
