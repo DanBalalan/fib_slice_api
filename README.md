@@ -4,7 +4,7 @@
 * docker-compose up --build
 
 Роуты:
-* http://127.0.0.1:5000/fibonacc
+* http://127.0.0.1:5000/fibonacci
 
 Зайти внутрь контейнеров:
 * docker exec -ti fib_api-redis /bin/bash

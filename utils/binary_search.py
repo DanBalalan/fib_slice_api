@@ -4,7 +4,7 @@ def binary_search_nearest(sequence, target, get_val_func=None):
 	:param target: искомое значение
 	:param get_val_func: Функция от 1 аргумента (элемента из sequence),
 		возвращающая значение сопоставленное этому элементу
-	:return: индекс, (True, если точное значение, False, если ближайшее к искомому)
+	:return: индекс, (True, если точное значение, False, если ближайшее сверху к искомому)
 	"""
 	min_idx, max_idx = 0, len(sequence) - 1
 	best_ind, exact = min_idx, False
