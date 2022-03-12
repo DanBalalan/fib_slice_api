@@ -2,8 +2,7 @@ import json
 from functools import wraps
 
 from utils.redis_client import RedisClient
-
-from settings import REDIS_DEFAULT_PORT, REDIS_DEFAULT_HOST, REDIS_DEFAULT_DB, CACHE_KEY_PREFIX
+from settings import CACHE_KEY_PREFIX
 
 
 def get_cache_key(func, args, kwargs):
@@ -29,4 +28,3 @@ def redis_cache(func):
 
         return result
     return wrapper
-
