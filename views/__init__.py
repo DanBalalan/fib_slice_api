@@ -1,4 +1,3 @@
-__all__ = ['IndexView', 'FibonacciView']
+__all__ = ['FibonacciView']
 
-from.index import IndexView
 from .fibonacci import FibonacciView
