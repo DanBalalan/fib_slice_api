@@ -37,4 +37,4 @@ class TestRedisCache:
         self.__call_cached(redis_client, (), {'argument': 'foo'})
 
     def test_cache_default_value(self, redis_client):
-        self.__call_cached(redis_client, (), {}, cleanup=False)
+        self.__call_cached(redis_client, (), {})
