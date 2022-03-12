@@ -1,19 +1,12 @@
-import json
-from itertools import count
-
 from flask import request, render_template
 from flask.views import MethodView
 
 from utils.fibonacci import get_by_position_range, get_by_value_range
-from utils.redis_client import RedisClient
-from settings import CACHE_KEY_PREFIX
 from .forms import FibonacciForm
 
 
 class FibonacciView(MethodView):
     template = 'fibonacci.html'
-    max_position_key = f'{CACHE_KEY_PREFIX}:fibonacci_max_cached_position'
-    redis_client = RedisClient.get_client()
 
     def get(self):
         form = FibonacciForm(request.args)
