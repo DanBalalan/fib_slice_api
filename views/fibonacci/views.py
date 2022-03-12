@@ -73,13 +73,16 @@ class FibonacciView(MethodView):
 
         # Начинаем с максимально возможного значения, попутно заполняя весь недостающий кеш
         # (предполагая, что существующий кеш непрерывный и целостный)
+        # start_iter_pos - для заполнения кеша при отсутсвии какой-либо части его диапазона
+        # start_pos - начальная искомая позиция, значение в которой отдаётся наружу
         cached_max, _ = self.__get_cached_max_position()
+        start_iter_pos = start_pos
         if start_pos > cached_max:
-            start_pos = cached_max + 1
-        print(f'start: {start_pos}, stop: {stop_pos}')
+            start_iter_pos = cached_max + 1
+
         curr_max_pos, curr_max_val = 0, 0
         res = []
-        for i in range(start_pos, stop_pos + 1, 1):
+        for i in range(start_iter_pos, stop_pos + 1, 1):
             fib_by_pos = fibonacci(i)
             if i >= start_pos:
                 res.append(fib_by_pos)
@@ -88,14 +91,6 @@ class FibonacciView(MethodView):
         self.__cache_max_position(curr_max_pos, curr_max_val)
 
         return res
-
-    def __get_min_position_by_value(self, value, max_cached_pos):
-        # min_value < max_cached_value
-
-        if cached_max[1] >= value:
-            pass
-        else:
-            return cached_max[0]
 
     def __get_cached_max_position(self):
         cached = self.redis_client.get(self.max_position_key)
